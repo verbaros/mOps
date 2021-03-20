@@ -47,3 +47,14 @@ def symmetric_diffrence(a, b, sort=True):
 
 
 SymD = symmetric_diffrence
+
+
+def cartesian_product(a, b):
+    if all([hasattr(a, '__iter__') for a in [a, b]]):
+        result = [(ax, bx) for bx in b for ax in a]
+        return result
+    else:
+        raise TypeError('Set must be iterable')
+
+
+CarP = cartesian_product

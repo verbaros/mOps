@@ -1,5 +1,5 @@
 import unittest
-import mOps.sets.operations.operations as ms
+import mOps.sets as ms
 
 
 class TestSetOperations(unittest.TestCase):
@@ -8,6 +8,8 @@ class TestSetOperations(unittest.TestCase):
         self.assertEqual(ms.U, ms.union)
         self.assertEqual(ms.I, ms.intersection)
         self.assertEqual(ms.SetD, ms.set_diffrence)
+        self.assertEqual(ms.SymD, ms.symmetric_diffrence)
+        self.assertEqual(ms.CarP, ms.cartesian_product)
 
     def test_union_sorted(self):
         a = [0, 2, 4, 6, 8]
@@ -75,9 +77,9 @@ class TestSetOperations(unittest.TestCase):
         self.assertListEqual(ms.SetD(ms.I(b, c), a), ms.I(b, ms.SetD(c, a)))
         self.assertListEqual(ms.I(ms.SetD(b, a), c), ms.SetD(ms.I(b, c), a))
         self.assertListEqual(ms.U(ms.SetD(b, a), c), ms.SetD(ms.U(b, c), ms.SetD(a, c)))
-        self.assertListEqual(ms.SetD(a, a), [])
-        self.assertListEqual(ms.SetD([], a), [])
-        self.assertListEqual(ms.SetD(a, []), a)
+        self.assertListEqual(ms.SetD(a, a), ms.EmptySet)
+        self.assertListEqual(ms.SetD(ms.EmptySet, a), ms.EmptySet)
+        self.assertListEqual(ms.SetD(a, ms.EmptySet), a)
 
     def test_symmetric_diffrence(self):
         a = [1, 2, 3]
@@ -104,5 +106,21 @@ class TestSetOperations(unittest.TestCase):
         self.assertListEqual(ms.U(a, b), ms.SymD(ms.SymD(a, b), ms.I(a, b)))
         self.assertListEqual(ms.SymD(a, b), ms.SymD(b, a))
         self.assertListEqual(ms.SymD(ms.SymD(a, b), c), ms.SymD(a, ms.SymD(b, c)))
-        self.assertListEqual(ms.SymD(a, []), a)
-        self.assertListEqual(ms.SymD(a, a), [])
+        self.assertListEqual(ms.SymD(a, ms.EmptySet), a)
+        self.assertListEqual(ms.SymD(a, a), ms.EmptySet)
+
+    def test_cartesian_product(self):
+        a = [1, 2, 3]
+        b = [1, 2, 4]
+        aResult = [(1, 1), (2, 1), (3, 1), (1, 2), (2, 2), (3, 2), (1, 4), (2, 4), (3, 4)]
+        result = ms.CarP(a, b)
+        self.assertListEqual(aResult, result)
+
+    def test_cartesian_product_non_iter(self):
+        a = 0
+        b = [1, 3, 5, 7, 9]
+        try:
+            ms.CarP(a, b)
+            self.fail('Set must be iterable')
+        except TypeError:
+            self.assertTrue(True)

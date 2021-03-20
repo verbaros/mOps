@@ -1,3 +1,5 @@
+from itertools import chain, combinations
+
 def union(*args, sort=True):
     if all([hasattr(a, '__iter__') for a in args]):
         result = []
@@ -58,3 +60,17 @@ def cartesian_product(a, b):
 
 
 CarP = cartesian_product
+
+
+def power_set(a, sort=True):
+    if (hasattr(a, '__iter__')):
+        result = list(chain.from_iterable(combinations(a, r) for r in range(len(a)+1)))
+        result = [list(elem) for elem in result]
+        if (sort):
+            result.sort()
+        return result
+    else:
+        raise TypeError('Set must be iterable')
+
+
+PwrS = power_set

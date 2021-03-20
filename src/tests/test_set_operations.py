@@ -10,6 +10,8 @@ class TestSetOperations(unittest.TestCase):
         self.assertEqual(ms.SetD, ms.set_diffrence)
         self.assertEqual(ms.SymD, ms.symmetric_diffrence)
         self.assertEqual(ms.CarP, ms.cartesian_product)
+        self.assertEqual(ms.PwrS, ms.power_set)
+
 
     def test_union_sorted(self):
         a = [0, 2, 4, 6, 8]
@@ -124,3 +126,21 @@ class TestSetOperations(unittest.TestCase):
             self.fail('Set must be iterable')
         except TypeError:
             self.assertTrue(True)
+
+    def test_power_set(self):
+        a = [1, 2, 3]
+        aResult = [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
+        result = ms.PwrS(a)
+        self.assertListEqual(aResult, result)
+
+    def test_power_set_non_iter(self):
+        a = 0
+        try:
+            ms.PwrS(a)
+            self.fail('Set must be iterable')
+        except TypeError:
+            self.assertTrue(True)
+
+    def test_power_set_properties(self):
+        a = [1, 2, 3]
+        self.assertEqual(len(ms.PwrS(a)), 2**len(a))

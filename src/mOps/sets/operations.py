@@ -1,76 +1,50 @@
+from mOps.sets.core import Set
 from itertools import chain, combinations
 
-def union(*args, sort=True):
-    if all([hasattr(a, '__iter__') for a in args]):
-        result = []
-        [result.extend(s) for s in args]
-        if (sort):
-            result.sort()
-        result = list(set(result))
-        return result
-    else:
-        raise TypeError('Set must be iterable')
-
+def union(inSet, *args):
+    result = inSet.copy()
+    for s in args:
+        result.extend(s)
+    return result
 
 U = union
 
 
-def intersection(*args):
-    if all([hasattr(a, '__iter__') for a in args]):
-        result = list(set.intersection(*map(set, args)))
-        result.sort()
-        return result
-    else:
-        raise TypeError('Set must be iterable')
+def intersection(inSet,*args):
+    result = set(inSet.copy())
+    for s in args:
+        result = result.intersection(s)
+    return Set(*result)
 
 
 I = intersection
 
 
-def set_diffrence(a, b, sort=True):
-    intr = I(a, b)
-    result = []
-    [ai if ai in intr else result.append(ai) for ai in a]
-    if (sort):
-        result.sort()
-    return result
+def set_diffrence(a, b):
+    return Set(*set(a.items()).difference(b.items()))
+
 
 
 SetD = set_diffrence
 
 
-def symmetric_diffrence(a, b, sort=True):
-    intr = I(a, b)
-    result = []
-    [ai if ai in intr else result.append(ai) for ai in union(a, b)]
-    if (sort):
-        result.sort()
-    return result
+def symmetric_diffrence(a, b):
+    return Set(*set(a.items()).symmetric_difference(b.items()))
 
 
 SymD = symmetric_diffrence
 
 
 def cartesian_product(a, b):
-    if all([hasattr(a, '__iter__') for a in [a, b]]):
-        result = [(ax, bx) for bx in b for ax in a]
-        return result
-    else:
-        raise TypeError('Set must be iterable')
+    return Set(*[(ax, bx) for bx in b for ax in a])
 
 
 CarP = cartesian_product
 
 
-def power_set(a, sort=True):
-    if (hasattr(a, '__iter__')):
-        result = list(chain.from_iterable(combinations(a, r) for r in range(len(a)+1)))
-        result = [list(elem) for elem in result]
-        if (sort):
-            result.sort()
-        return result
-    else:
-        raise TypeError('Set must be iterable')
+def power_set(a, sort=False):
+    result = list(chain.from_iterable(combinations(a, r) for r in range(len(a) + 1)))
+    return Set(*[Set(elem) for elem in result])
 
 
 PwrS = power_set

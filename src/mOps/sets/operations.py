@@ -44,7 +44,7 @@ CarP = cartesian_product
 
 def power_set(a, sort=False):
     result = list(chain.from_iterable(combinations(a, r) for r in range(len(a) + 1)))
-    return Set(*[Set(elem) for elem in result])
+    return Set(*[Set(*elem) for elem in result])
 
 
 PwrS = power_set

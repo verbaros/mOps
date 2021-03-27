@@ -22,13 +22,13 @@ class Set:
         self.maxDisplay = maxDisplay
 
     def __hash__(self):
-        return hash(self.backing)
+        return hash(' '.join(str(v) for v in list(self._dict.keys())))
 
     def __getitem__(self, index):
         return self._dict.keys(  )[index]
 
     def __iter__(self):
-        return iter(self._dict.copy(  ))
+        return iter(sorted(self._dict.copy(  )))
 
     def __len__(self):
         return len(self._dict)
@@ -50,7 +50,7 @@ class Set:
         return str(self)
 
     def __eq__(self, other):
-        return frozenset(self.items()) == frozenset(other.items())
+        return set(self.items()) == set(other.items())
 
     def __lt__(self, other):
         return len(self) < len(other)

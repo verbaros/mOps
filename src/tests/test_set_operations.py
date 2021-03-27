@@ -1,5 +1,8 @@
 import unittest
 import mOps.sets as ms
+import mOps.logic as ml
+import mOps.core.number_generators as ng
+
 
 
 class TestSetOperations(unittest.TestCase):
@@ -99,3 +102,6 @@ class TestSetOperations(unittest.TestCase):
     def test_power_set_properties(self):
         a = [1, 2, 3]
         self.assertEqual(len(ms.PwrS(a)), 2 ** len(a))
+
+    def test_generator(self):
+        ms.Set().fromGenerator(ng.isPrime, ml.OR, ng.isEven)

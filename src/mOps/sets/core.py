@@ -1,6 +1,7 @@
+import inspect
 from mOps.sets import symbols as symbols
+from mOps.core import number_generators
 
-#https://www.oreilly.com/library/view/python-cookbook/0596001673/ch05s18.html
 class Set:
 
     def __init__(self,  *args, varName=None, displayType='unicode',maxDisplay=10):
@@ -76,4 +77,23 @@ class Set:
     def contains(self, item):
         return self._dict.has_key(item)
 
+    def fromGenerator(self,*args,generator=None,gen_size=5):
+        if (generator is None):
+            generator = number_generators.rangeGenerator(size=gen_size)
 
+        for x in generator:
+            cond = True
+            if(len(args)>=1):
+                y_offset = 0
+                if (len(inspect.getfullargspec(args[0]).args) == 2):
+                    cond = args[0](x,args[1])
+                    y_offset += 1
+                else:
+                    cond = args[0](x)
+
+                for y in range(1, len(args)-y_offset, 2):
+                    b = args[y + y_offset + 1]
+                    cond = args[y+y_offset](cond, b(x))
+            if(cond):
+                self.add(x)
+        return self

@@ -34,9 +34,6 @@ class Set:
     def __len__(self):
         return len(self._dict)
 
-    def copy(self):
-        return Set(*self.items())
-
     def __str__(self):
         if len(self._dict) == 0:
             return '{ }'
@@ -59,6 +56,11 @@ class Set:
     def __gt__(self, other):
         return len(self) > len(other)
 
+    def innerSet(self):
+        return set(self.items())
+
+    def copy(self):
+        return Set(*self.items())
 
     def items(self):
         result = self._dict.keys()
@@ -76,6 +78,10 @@ class Set:
 
     def contains(self, item):
         return self._dict.has_key(item)
+
+    def get_cardinality(self):
+        return self.__len__()
+
 
     def fromGenerator(self,*args,generator=None,gen_size=5):
         if (generator is None):
@@ -97,3 +103,16 @@ class Set:
             if(cond):
                 self.add(x)
         return self
+
+    def hasSubset(self,subSet):
+        '''
+        try:
+            subSet.backing == symbols.EmptySet
+            return True
+        except:
+            pass
+        '''
+        return subSet.innerSet().issubset(self.innerSet())
+
+    def hasMember(self,element):
+        return self.contains(element)
